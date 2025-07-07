@@ -28,11 +28,11 @@ jobs:
         with:
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
           API_KEY: ${{ secrets.API_KEY }}
-          agent_id: ${{ env.AGENT_ID }}
-          scenarios: ${{ env.SCENARIOS }}
-          frequency: ${{ env.FREQUENCY }}
-          timeout: ${{ env.TIMEOUT }}
-          poll_interval: ${{ env.POLL_INTERVAL }}
+          agent_id: ${{ vars.AGENT_ID }}
+          scenarios: ${{ vars.SCENARIOS }}
+          frequency: ${{ vars.FREQUENCY }}
+          timeout: ${{ vars.TIMEOUT }}
+          poll_interval: ${{ vars.POLL_INTERVAL }}
 ```
 
 ## Secrets
