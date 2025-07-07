@@ -11,6 +11,12 @@ Add the following workflow to your repository (e.g., `.github/workflows/deploy.y
 ```yaml
 name: Vocera Run Test Auto
 
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
 jobs:
   run-scenarios:
     runs-on: ubuntu-latest
@@ -19,14 +25,14 @@ jobs:
       
       - name: Run Vocera Scenarios
         uses: vocera-ai/vocera-run-test-auto@main
-        env:
+        with:
           API_BASE_URL: ${{ secrets.API_BASE_URL }}
           API_KEY: ${{ secrets.API_KEY }}
-          AGENT_ID: ${{ env.AGENT_ID }}
-          SCENARIOS: ${{ env.SCENARIOS }}
-          FREQUENCY: ${{ env.FREQUENCY }}
-          TIMEOUT: ${{ env.TIMEOUT }}
-          POLL_INTERVAL: ${{ env.POLL_INTERVAL }}
+          agent_id: ${{ env.AGENT_ID }}
+          scenarios: ${{ env.SCENARIOS }}
+          frequency: ${{ env.FREQUENCY }}
+          timeout: ${{ env.TIMEOUT }}
+          poll_interval: ${{ env.POLL_INTERVAL }}
 ```
 
 ## Secrets
