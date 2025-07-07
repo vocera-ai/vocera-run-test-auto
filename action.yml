@@ -2,19 +2,54 @@ name: "Vocera Run Test Auto"
 description: "Run scenarios against Vocera agents"
 author: "Vocera AI"
 
+inputs:
+  agent_id:
+    description: "Agent ID"
+    required: true
+  scenarios:
+    description: "Comma-separated list of scenario IDs"
+    required: true
+  frequency:
+    description: "Number of times to run each scenario"
+    required: false
+    default: "1"
+  timeout:
+    description: "Timeout in seconds"
+    required: false
+    default: "3600"
+  API_BASE_URL:
+    description: "Base URL for connecting to Vocera API"
+    required: true
+  API_KEY:
+    description: "API Key for authentication"
+    required: true
+
 runs:
   using: "composite"
   steps:
-    - name: Run Scenarios
-      uses: vocera-ai/vocera-run-test-auto/.github/workflows/deploy.yml
+    - uses: actions/checkout@v2
+      
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    
+    - name: Install dependencies
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r ${{ github.action_path }}/requirements.txt
+    
+    - name: Run scenarios
+      shell: bash
       env:
-        API_BASE_URL: ${{ secrets.API_BASE_URL }}
-        API_KEY: ${{ secrets.API_KEY }}
-        AGENT_ID: ${{ env.AGENT_ID }}
-        SCENARIOS: ${{ env.SCENARIOS }}
-        FREQUENCY: ${{ env.FREQUENCY }}
-        TIMEOUT: ${{ env.TIMEOUT }}
-        POLL_INTERVAL: ${{ env.POLL_INTERVAL }}
+        API_BASE_URL: ${{ inputs.API_BASE_URL }}
+        API_KEY: ${{ inputs.API_KEY }}
+        AGENT_ID: ${{ inputs.agent_id }}
+        SCENARIOS: ${{ inputs.scenarios }}
+        FREQUENCY: ${{ inputs.frequency }}
+        TIMEOUT: ${{ inputs.timeout }}
+      run: python ${{ github.action_path }}/run_scenarios.py
 
 branding:
   icon: "play-circle"
